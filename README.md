@@ -107,19 +107,19 @@ Exemplo de payload:
 
 ### Buscar pedido por ID
 
-GET `/orders/:orderId`
+GET `/order/:orderId`
 
 ---
 
 ### Listar pedidos
 
-GET `/orders`
+GET `/order`
 
 ---
 
 ### Remover pedido
 
-DELETE `/orders/:orderId`
+DELETE `/order/:orderId`
 
 ---
 

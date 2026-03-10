@@ -4,9 +4,9 @@ const validateOrder = require("../middleware/validateOrder");
 
 const router = express.Router();
 
-router.post("/orders", validateOrder, orderController.createOrder);
-router.get("/orders", orderController.getAllOrders);
-router.get("/orders/:orderId", orderController.getOrderById);
-router.delete("/orders/:orderId", orderController.deleteOrder);
+router.post("/order", validateOrder, orderController.createOrder);
+router.get("/order", orderController.getAllOrders);
+router.get("/order/:orderId", orderController.getOrderById);
+router.delete("/order/:orderId", orderController.deleteOrder);
 
 module.exports = router;
