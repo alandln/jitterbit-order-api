@@ -45,21 +45,20 @@ USE jitterbit;
 Criar tabelas:
 
 ```sql
-CREATE TABLE orders (
-    order_id VARCHAR(50) PRIMARY KEY,
+CREATE TABLE `Order` (
+    orderId VARCHAR(50) PRIMARY KEY,
     value DECIMAL(10,2) NOT NULL,
-    creation_date DATETIME NOT NULL
+    creationDate DATETIME NOT NULL
 );
 
-CREATE TABLE items (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    order_id VARCHAR(50) NOT NULL,
-    product_id INT NOT NULL,
+CREATE TABLE Items (
+    orderId VARCHAR(50) NOT NULL,
+    productId INT NOT NULL,
     quantity INT NOT NULL,
     price DECIMAL(10,2) NOT NULL,
     CONSTRAINT fk_items_order
-        FOREIGN KEY (order_id)
-        REFERENCES orders(order_id)
+        FOREIGN KEY (orderId)
+        REFERENCES `Order`(orderId)
         ON DELETE CASCADE
 );
 ```
@@ -84,7 +83,7 @@ http://localhost:3000
 
 ### Criar pedido
 
-POST `/orders`
+POST `/order`
 
 Exemplo de payload:
 

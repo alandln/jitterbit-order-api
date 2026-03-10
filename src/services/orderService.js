@@ -12,7 +12,7 @@ async function createOrder(orderData) {
         const creationDate = new Date(orderData.dataCriacao);
 
         await connection.query(
-            "INSERT INTO orders (order_id, value, creation_date) VALUES (?, ?, ?)",
+            "INSERT INTO `Order` (orderId, value, creationDate) VALUES (?, ?, ?)",
             [orderId, value, creationDate]
         );
 
@@ -22,7 +22,7 @@ async function createOrder(orderData) {
             const price = item.valorItem;
 
             await connection.query(
-                "INSERT INTO items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)",
+                "INSERT INTO Items (orderId, productId, quantity, price) VALUES (?, ?, ?, ?)",
                 [orderId, productId, quantity, price]
             );
         }
@@ -47,7 +47,7 @@ async function createOrder(orderData) {
 
 async function getOrderById(orderId) {
     const [orders] = await pool.query(
-        "SELECT * FROM orders WHERE order_id = ?",
+        "SELECT * FROM `Order` WHERE orderId = ?",
         [orderId]
     );
 
@@ -56,16 +56,16 @@ async function getOrderById(orderId) {
     }
 
     const [items] = await pool.query(
-        "SELECT product_id, quantity, price FROM items WHERE order_id = ?",
+        "SELECT productId, quantity, price FROM Items WHERE orderId = ?",
         [orderId]
     );
 
     return {
-        orderId: orders[0].order_id,
+        orderId: orders[0].orderId,
         value: Number(orders[0].value),
-        creationDate: orders[0].creation_date,
+        creationDate: orders[0].creationDate,
         items: items.map(item => ({
-            productId: item.product_id,
+            productId: item.productId,
             quantity: item.quantity,
             price: Number(item.price)
         }))
@@ -74,23 +74,23 @@ async function getOrderById(orderId) {
 
 async function getAllOrders() {
     const [orders] = await pool.query(
-        "SELECT * FROM orders ORDER BY creation_date DESC"
+        "SELECT * FROM `Order` ORDER BY creationDate DESC"
     );
 
     const result = [];
 
     for (const order of orders) {
-        const[items] = await pool.query(
-            "SELECT product_id, quantity, price FROM items WHERE order_id = ?",
-            [order.order_id]
+        const [items] = await pool.query(
+            "SELECT productId, quantity, price FROM Items WHERE orderId = ?",
+            [order.orderId]
         );
 
         result.push({
-            orderId: order.order_id,
+            orderId: order.orderId,
             value: Number(order.value),
-            creationDate: order.creation_date,
+            creationDate: order.creationDate,
             items: items.map(item => ({
-                productId: item.product_id,
+                productId: item.productId,
                 quantity: item.quantity,
                 price: Number(item.price)
             }))
@@ -101,12 +101,12 @@ async function getAllOrders() {
 }
 
 async function deleteOrder(orderId) {
-    const[result] = await pool.query(
-        "DELETE FROM orders WHERE order_id = ?",
+    const [result] = await pool.query(
+        "DELETE FROM `Order` WHERE orderId = ?",
         [orderId]
     );
 
-    if(result.affectedRows === 0) {
+    if (result.affectedRows === 0) {
         throw new AppError("Order not found", 404); 
     }
 }
